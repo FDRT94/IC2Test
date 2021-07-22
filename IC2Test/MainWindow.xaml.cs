@@ -123,16 +123,26 @@ namespace IC2Test
 
         // Terras Regels
 
-        //private void Validation
-
         // Terras Options
 
         // selecteer item dat verplaatst moet worden
+        // check of bezoeker mag worden toegevoegd aan het Terras
+
+
+        // Controlechecks:
+        // check dezelfde bezoeker mag niet meerdere keren aan een lijst worden toegevoegd
+        // check maximaal 4 op Terras
+        // check maximaal 2 huishoudens
+        // check pas toegestaan op terras als iedereen behalve jij is geweest, behalve de eerste keer
+
+
         // voeg Bezoeker toe aan locatie
         // Geef LastVisited een Waarde
         // error handling
         private void NaarTerras(object sender, RoutedEventArgs e)
         {
+
+
             // select selected item
             foreach (object o in TopDataGrid.SelectedItems)
             {
@@ -153,9 +163,13 @@ namespace IC2Test
                     throw;
                 }
             }
+
+            
+
+
         }
 
-        // verwijderd 1 bezoeker
+
         // selecteer bezoeker
         // verwijder bezoeker vanuit TerrasDatagrid
         // error Handling
