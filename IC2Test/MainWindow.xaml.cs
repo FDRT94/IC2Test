@@ -26,7 +26,7 @@ namespace IC2Test
         public MainWindow()
         {
             InitializeComponent();
-            TopDataGrid.ItemsSource = LoadCollectionData();
+            TopDataGrid.ItemsSource = LoadCollectionData(); 
         }
 
 
@@ -42,7 +42,7 @@ namespace IC2Test
                 Name = "Mark Rutte",
                 From = "Den Haag",
                 Household = 1,
-                LastVisited = DateTime.Now
+                //LastVisited = DateTime.Now
             });
 
 
@@ -126,12 +126,17 @@ namespace IC2Test
         // Terras Options
 
         // selecteer item dat verplaatst moet worden
-        // check of bezoeker mag worden toegevoegd aan het Terras
+        // check of bezoeker mag worden toegevoegd aan het Terras op globale variabele en of terras
 
 
         // Controlechecks:
         // check dezelfde bezoeker mag niet meerdere keren aan een lijst worden toegevoegd
-        // check maximaal 4 op Terras
+        // check maximaal 4 op Terras -> globale teller -> count();
+        
+        // haal hem uit observable collection en vergelijk met de andere collection
+
+        //   gemuteerde huishoudens toe aan 
+
         // check maximaal 2 huishoudens
         // check pas toegestaan op terras als iedereen behalve jij is geweest, behalve de eerste keer
 
@@ -141,8 +146,6 @@ namespace IC2Test
         // error handling
         private void NaarTerras(object sender, RoutedEventArgs e)
         {
-
-
             // select selected item
             foreach (object o in TopDataGrid.SelectedItems)
             {
@@ -152,7 +155,10 @@ namespace IC2Test
 
                     TerrasDataGrid.Items.Add(bezoeker);
 
-                    for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
+                    for (
+                        int i = 0; 
+                        i < TerrasDataGrid.Items.Count + 1;
+                        i++)
                     {
                         bezoeker.LastVisited = DateTime.Now;
                     }
@@ -163,10 +169,6 @@ namespace IC2Test
                     throw;
                 }
             }
-
-            
-
-
         }
 
 
@@ -175,6 +177,32 @@ namespace IC2Test
         // error Handling
         private void NaarHuis(object sender, RoutedEventArgs e)
         {
+            //Tolist()
+
+            //for
+
+            try
+            {
+             // Collection was modified; enumeration operation may not execute
+                foreach (object o in TerrasDataGrid.SelectedItems)
+                    {
+                        TerrasDataGrid.Items.Remove(o);
+                    }
+            } 
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+               
+            }
+        }
+
+
+
+                    
+
+            //var bezoeker = o as Person;
+
+            //TerrasDataGrid.Items.Add(bezoeker);
 
             //  foreach (object o in TopDataGrid.SelectedItems)
 
@@ -208,14 +236,13 @@ namespace IC2Test
             //}
             
 
-        }
+        
 
-        // Leegt het volledige Terras van alle bezoekers
-        // selecteer alle items
-        // Leeg volledig Terras
+        
+        // selecteer alle items in de DataGrid
+        // Leeg alle items
         private void LeegTerras(object sender, RoutedEventArgs e)
         {
-            // select alle items item
             try
             {
                 TerrasDataGrid.Items.Clear();
@@ -238,3 +265,4 @@ namespace IC2Test
         }
     }
 }
+
