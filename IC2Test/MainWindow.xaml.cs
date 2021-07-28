@@ -24,12 +24,12 @@ namespace IC2Test
         public MainWindow()
         {
             InitializeComponent();
-            TopDataGrid.ItemsSource = LoadCollectionData();
+            TopDataGrid.ItemsSource = PersonCollectionData();
+            TerrasDataGrid.ItemsSource = BezoekerData();
         }
 
-
         // fill TopdataGrid with data
-        private ObservableCollection<Person> LoadCollectionData()
+        private ObservableCollection<Person> PersonCollectionData()
         {
             ObservableCollection<Person> PersonList = new ObservableCollection<Person>();
 
@@ -119,14 +119,25 @@ namespace IC2Test
             return PersonList;
         }
 
-        // Terras Regels
+        private ObservableCollection<Person> BezoekerData()
+        {
+            ObservableCollection<Person> BezoekerList = new ObservableCollection<Person>();
 
-        // Terras Options
+            // no DateTime Mentioned because it is left empty at start
+            BezoekerList.Add(new Person()
+            {
+                ID = 11,
+                Name = "Donald Trump",
+                From = "New York City",
+                Household = 4,
+                LastVisited = DateTime.Now
+            });
 
-        // selecteer item dat verplaatst moet worden
-        // check of bezoeker mag worden toegevoegd aan het Terras
+            return BezoekerList;
+        }
 
-
+        // maak globals om "controlechecks" uit te voeren om te controleren of mensen naar het terras mogen
+        // 
         // Controlechecks:
         // check dezelfde bezoeker mag niet meerdere keren aan een lijst worden toegevoegd
         // check maximaal 4 op Terras
@@ -134,8 +145,11 @@ namespace IC2Test
         // check pas toegestaan op terras als iedereen behalve jij is geweest, behalve de eerste keer
 
 
+
+
         // voeg Bezoeker toe aan locatie
-        // Geef LastVisited een Waarde
+        // Geef LastVisited een tijdstip
+        // update datagrid met nieuw tijdstip
         // error handling
         private void NaarTerras(object sender, RoutedEventArgs e)
         {
@@ -145,13 +159,19 @@ namespace IC2Test
                 try
                 {
                     var bezoeker = o as Person;
-                    TerrasDataGrid.Items.Add(bezoeker);
 
                     for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
                     {
                         bezoeker.LastVisited = DateTime.Now;
                     }
 
+                    // Oude Manier
+                    //TerrasDataGrid.Items.Add(bezoeker);
+
+                    // voegt niks toe aan Terras?
+                    BezoekerData().Add(bezoeker);
+
+                    // Refresh Veranderde items zodat Date correct word weergeven
                     TopDataGrid.Items.Refresh();
                 }
                 catch (Exception ex)
@@ -168,37 +188,23 @@ namespace IC2Test
         private void NaarHuis(object sender, RoutedEventArgs e)
         {
 
-            //  foreach (object o in TopDataGrid.SelectedItems)
+            foreach (object o in TerrasDataGrid.SelectedItems)
+            {
+                try
+                {
+                    var bezoeker = o as Person;
 
-            //var bezoeker = o as Person;
+                    //TerrasDataGrid.Items.Remove(bezoeker);
 
-            //TerrasDataGrid.Items.Add(bezoeker);
+                    BezoekerData().Remove(bezoeker);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
+                    throw;
+                }
 
-            //for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
-            //{
-            //    bezoeker.LastVisited = DateTime.Now;
-            //}
-
-            //var bezoeker = o as Person;
-
-            //for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
-            //{
-            //    bezoeker.LastVisited = DateTime.Now;
-            //}
-
-            //try
-            //{
-            //    foreach (object o in TerrasDataGrid.SelectedItems)
-            //{
-            //        TerrasDataGrid.SelectedItem.Remove(o);
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("Error" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    throw;
-            //}
-
+            }
 
         }
 
@@ -207,10 +213,10 @@ namespace IC2Test
         // Leeg volledig Terras
         private void LeegTerras(object sender, RoutedEventArgs e)
         {
-            // select alle items item
             try
             {
-                TerrasDataGrid.Items.Clear();
+                //TerrasDataGrid.Items.Clear();
+                BezoekerData().Clear();
             }
             catch (Exception ex)
             {
