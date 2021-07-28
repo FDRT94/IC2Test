@@ -21,8 +21,6 @@ namespace IC2Test
     /// </summary>
     public partial class MainWindow : Window
     {
-
-
         public MainWindow()
         {
             InitializeComponent();
@@ -141,21 +139,20 @@ namespace IC2Test
         // error handling
         private void NaarTerras(object sender, RoutedEventArgs e)
         {
-
-
             // select selected item
             foreach (object o in TopDataGrid.SelectedItems)
             {
                 try
                 {
                     var bezoeker = o as Person;
-
                     TerrasDataGrid.Items.Add(bezoeker);
 
                     for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
                     {
                         bezoeker.LastVisited = DateTime.Now;
                     }
+
+                    TopDataGrid.Items.Refresh();
                 }
                 catch (Exception ex)
                 {
@@ -163,12 +160,7 @@ namespace IC2Test
                     throw;
                 }
             }
-
-            
-
-
         }
-
 
         // selecteer bezoeker
         // verwijder bezoeker vanuit TerrasDatagrid
@@ -206,7 +198,7 @@ namespace IC2Test
             //    MessageBox.Show("Error" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
             //    throw;
             //}
-            
+
 
         }
 
