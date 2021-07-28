@@ -24,9 +24,9 @@
              VerticalAlignment="Top" RowHeight="30" ColumnWidth="100" HorizontalContentAlignment="Stretch">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID"  Binding="{Binding Path=ID}" Width="auto"></DataGridTextColumn>
-                <DataGridTextColumn Header="Naam"  Binding="{Binding Path=Name}" Width="auto"></DataGridTextColumn>
+               
                 <DataGridTextColumn Header="Huishouden" Binding="{Binding Path=Household}" Width="auto"></DataGridTextColumn>
-                <DataGridTextColumn Header="Laatse Bezoek"  Binding="{Binding Path=LastVisited}" Width="auto"></DataGridTextColumn>
+                
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Naar Terras" HorizontalAlignment="Left" Margin="505,241,0,0" VerticalAlignment="Top" Width="75" Click="NaarTerras"/>
