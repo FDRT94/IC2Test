@@ -21,20 +21,18 @@ namespace IC2Test
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ObservableCollection<Person> PersonCollectionData;
+        private ObservableCollection<Person> BezoekerData;
         public MainWindow()
+
         {
             InitializeComponent();
-            TopDataGrid.ItemsSource = PersonCollectionData();
-            TerrasDataGrid.ItemsSource = BezoekerData();
-        }
+            PersonCollectionData = new ObservableCollection<Person>();
+            BezoekerData = new ObservableCollection<Person>();
 
-        // fill TopdataGrid with data
-        private ObservableCollection<Person> PersonCollectionData()
-        {
-            ObservableCollection<Person> PersonList = new ObservableCollection<Person>();
 
-            // no DateTime Mentioned because it is left empty at start
-            PersonList.Add(new Person()
+            // moet in aparte method
+            PersonCollectionData.Add(new Person()
             {
                 ID = 1,
                 Name = "Mark Rutte",
@@ -43,98 +41,14 @@ namespace IC2Test
                 LastVisited = DateTime.Now
             });
 
-
-            PersonList.Add(new Person()
             {
-                ID = 2,
-                Name = "Geert Wilders",
-                From = "Venlo",
-                Household = 1,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 3,
-                Name = "Wopke Hoekstra",
-                From = "Bennekom",
-                Household = 1,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 4,
-                Name = "Willem van Alexander",
-                From = "Den Haag",
-                Household = 1,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 5,
-                Name = "Jane Doe",
-                From = "Amsterdam",
-                Household = 2,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 6,
-                Name = "John Doe",
-                From = "Amsterdam",
-                Household = 2,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 7,
-                Name = "Denzel Dumfries",
-                From = "Groningen",
-                Household = 3,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 8,
-                Name = "Matthijs de Ligt",
-                From = "Rotterdam",
-                Household = 3,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 9,
-                Name = "Donyell Malen",
-                From = "Amsterdam",
-                Household = 3,
-            });
-
-            PersonList.Add(new Person()
-            {
-                ID = 10,
-                Name = "Marten de Roon",
-                From = "Friesland",
-                Household = 3,
-            });
-
-            return PersonList;
+            }
+            TopDataGrid.ItemsSource = PersonCollectionData;
+            //            TerrasDataGrid.ItemsSource = BezoekerData;
         }
 
-        private ObservableCollection<Person> BezoekerData()
-        {
-            ObservableCollection<Person> BezoekerList = new ObservableCollection<Person>();
+        // fill TopdataGrid with data
 
-            // no DateTime Mentioned because it is left empty at start
-            BezoekerList.Add(new Person()
-            {
-                ID = 11,
-                Name = "Donald Trump",
-                From = "New York City",
-                Household = 4,
-                LastVisited = DateTime.Now
-            });
-
-            return BezoekerList;
-        }
 
         // maak globals om "controlechecks" uit te voeren om te controleren of mensen naar het terras mogen
         // 
@@ -154,6 +68,21 @@ namespace IC2Test
         private void NaarTerras(object sender, RoutedEventArgs e)
         {
             // select selected item
+
+            // PersonCollectionData.Add(new Person()
+            BezoekerData.Add(new Person()
+            {
+                ID = 5,
+                Name = "Jane Doe",
+                From = "Amsterdam",
+                Household = 2,
+            });
+
+            {
+            }
+            // TopDataGrid.ItemsSource = PersonCollectionData;
+            TerrasDataGrid.ItemsSource = BezoekerData;
+
             foreach (object o in TopDataGrid.SelectedItems)
             {
                 try
@@ -169,10 +98,12 @@ namespace IC2Test
                     //TerrasDataGrid.Items.Add(bezoeker);
 
                     // voegt niks toe aan Terras?
-                    BezoekerData().Add(bezoeker);
+                    // BezoekerData().Add(bezoeker);
 
                     // Refresh Veranderde items zodat Date correct word weergeven
-                    TopDataGrid.Items.Refresh();
+                    //                    TopDataGrid.Items.Refresh();
+                    TopDataGrid.ItemsSource = PersonCollectionData;
+                    // TerrasDataGrid.ItemsSource = BezoekerData;
                 }
                 catch (Exception ex)
                 {
@@ -196,7 +127,7 @@ namespace IC2Test
 
                     //TerrasDataGrid.Items.Remove(bezoeker);
 
-                    BezoekerData().Remove(bezoeker);
+                    //BezoekerData().Remove(bezoeker);
                 }
                 catch (Exception ex)
                 {
@@ -216,7 +147,7 @@ namespace IC2Test
             try
             {
                 //TerrasDataGrid.Items.Clear();
-                BezoekerData().Clear();
+                //BezoekerData().Clear();
             }
             catch (Exception ex)
             {
