@@ -21,8 +21,12 @@ namespace IC2Test
     /// </summary>
     public partial class MainWindow : Window
     {
+
         private ObservableCollection<Person> PersonCollectionData;
         private ObservableCollection<Person> BezoekerData;
+        private int nPersonenOpTerras = 0;
+        private int nHHOpTerras = 0;
+
         public MainWindow()
 
         {
@@ -30,36 +34,58 @@ namespace IC2Test
             PersonCollectionData = new ObservableCollection<Person>();
             BezoekerData = new ObservableCollection<Person>();
 
-
-            // moet in aparte method
+            // fill TopdataGrid with data
+            // hoort eigelijk in een aparte method
             PersonCollectionData.Add(new Person()
             {
                 ID = 1,
                 Name = "Mark Rutte",
                 From = "Den Haag",
                 Household = 1,
-                LastVisited = DateTime.Now
             });
 
+            PersonCollectionData.Add(new Person()
             {
-            }
+                ID = 2,
+                Name = "Dick van Kooten",
+                From = "Den Haag",
+                Household = 2, 
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 3,
+                Name = "Kees Kleijn",
+                From = "Den Haag",
+                Household = 3,
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 4,
+                Name = "Frank de Raadt",
+                From = "Hoogvliet",
+                Household = 4,
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 5,
+                Name = "John Doe",
+                From = "Den Haag",
+                Household = 5, 
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 6,
+                Name = "Jane Doe",
+                From = "Den Haag",
+                Household = 5,
+            });
+
             TopDataGrid.ItemsSource = PersonCollectionData;
-            //            TerrasDataGrid.ItemsSource = BezoekerData;
         }
-
-        // fill TopdataGrid with data
-
-
-        // maak globals om "controlechecks" uit te voeren om te controleren of mensen naar het terras mogen
-        // 
-        // Controlechecks:
-        // check dezelfde bezoeker mag niet meerdere keren aan een lijst worden toegevoegd
-        // check maximaal 4 op Terras
-        // check maximaal 2 huishoudens
-        // check pas toegestaan op terras als iedereen behalve jij is geweest, behalve de eerste keer
-
-
-
 
         // voeg Bezoeker toe aan locatie
         // Geef LastVisited een tijdstip
@@ -67,20 +93,7 @@ namespace IC2Test
         // error handling
         private void NaarTerras(object sender, RoutedEventArgs e)
         {
-            // select selected item
 
-            // PersonCollectionData.Add(new Person()
-            BezoekerData.Add(new Person()
-            {
-                ID = 5,
-                Name = "Jane Doe",
-                From = "Amsterdam",
-                Household = 2,
-            });
-
-            {
-            }
-            // TopDataGrid.ItemsSource = PersonCollectionData;
             TerrasDataGrid.ItemsSource = BezoekerData;
 
             foreach (object o in TopDataGrid.SelectedItems)
@@ -89,21 +102,61 @@ namespace IC2Test
                 {
                     var bezoeker = o as Person;
 
-                    for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
+                    // Control Check max 4 personen
+                    if (BezoekerData.Count >= 4)
                     {
-                        bezoeker.LastVisited = DateTime.Now;
+                        MessageBox.Show("Terras zit al Vol", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                        break;
                     }
 
-                    // Oude Manier
-                    //TerrasDataGrid.Items.Add(bezoeker);
+                    // check of Persoon al niet op het terras aanwezig is
+                    else if (BezoekerData.Contains(bezoeker))
+                    {
+                        MessageBox.Show("Persoon is al Aanwezig op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                        break;
+                    }
 
-                    // voegt niks toe aan Terras?
-                    // BezoekerData().Add(bezoeker);
 
-                    // Refresh Veranderde items zodat Date correct word weergeven
-                    //                    TopDataGrid.Items.Refresh();
-                    TopDataGrid.ItemsSource = PersonCollectionData;
-                    // TerrasDataGrid.ItemsSource = BezoekerData;
+                    
+
+                    // Controlecheck of andere personen naar het terras mogen voordat de persoon word geplaats
+                    // Eerst Controleren of een Persoon uberhaupt is geweest
+                    // Daarna Controleren of de Persoon naar het Terras mag omdat alle anderen zijn geweest
+
+                    if (bezoeker.LastVisited == null)
+                    {
+                        for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
+                        {
+                            bezoeker.LastVisited = DateTime.Now;
+                        }
+
+                        BezoekerData.Add(bezoeker);
+                        TopDataGrid.Items.Refresh();
+                    }
+                    else if (bezoeker.LastVisited != null)
+                    {
+                        var OrderWachtendeDatum = PersonCollectionData.OrderBy(item => item.LastVisited).First();
+
+                        // convert Person object to DateTime Format
+                        DateTime? VroegsteWachtendeDatum = OrderWachtendeDatum.LastVisited;
+
+                        int result = DateTime.Compare((DateTime)bezoeker.LastVisited, (DateTime)VroegsteWachtendeDatum);
+                        if (result <= 0)
+                        {
+                            MessageBox.Show("Persoon is Toegevoegd aan het terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Information);
+                            for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
+                            {
+                                bezoeker.LastVisited = DateTime.Now;
+                            }
+
+                            BezoekerData.Add(bezoeker);
+                            TopDataGrid.Items.Refresh();
+                        }
+                        else if (result > 0)
+                        {
+                            MessageBox.Show("Een ander persoon is eerst aan de beurt", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -118,36 +171,31 @@ namespace IC2Test
         // error Handling
         private void NaarHuis(object sender, RoutedEventArgs e)
         {
-
             foreach (object o in TerrasDataGrid.SelectedItems)
             {
+                var bezoeker = o as Person;
+
                 try
                 {
-                    var bezoeker = o as Person;
-
-                    //TerrasDataGrid.Items.Remove(bezoeker);
-
-                    //BezoekerData().Remove(bezoeker);
+                    BezoekerData.Remove(bezoeker);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
                     throw;
                 }
-
             }
-
         }
 
+
+
         // Leegt het volledige Terras van alle bezoekers
-        // selecteer alle items
-        // Leeg volledig Terras
         private void LeegTerras(object sender, RoutedEventArgs e)
         {
             try
             {
-                //TerrasDataGrid.Items.Clear();
-                //BezoekerData().Clear();
+                BezoekerData.Clear();
+                MessageBox.Show("Terras is leeggemaakt", "Heading", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {

@@ -8,7 +8,7 @@
         Title="MainWindow" Height="auto" Width="600">
 
     <Grid>
-        <DataGrid Name="TopDataGrid"  SelectionMode="Extended" AutoGenerateColumns="False" Height="325" Width="500" HorizontalAlignment="Left" Margin="0,10,0,0"   
+        <DataGrid Name="TopDataGrid" CanUserAddRows="False"  SelectionMode="Extended" AutoGenerateColumns="False" Height="325" Width="500" HorizontalAlignment="Left" Margin="0,10,0,0"   
              VerticalAlignment="Top" RowHeight="30" ColumnWidth="100" HorizontalContentAlignment="Stretch" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" Width="auto"></DataGridTextColumn>
