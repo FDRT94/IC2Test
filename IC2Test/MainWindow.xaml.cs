@@ -52,6 +52,14 @@ namespace IC2Test
             PersonCollectionData.Add(new Person()
             {
                 ID = 2,
+                Name = "Mariette Rutten",
+                From = "Den Haag",
+                Household = 1,
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 3,
                 Name = "Dick van Kooten",
                 From = "Den Haag",
                 Household = 2,
@@ -59,7 +67,7 @@ namespace IC2Test
 
             PersonCollectionData.Add(new Person()
             {
-                ID = 3,
+                ID = 4,
                 Name = "Kees Kleijn",
                 From = "Den Haag",
                 Household = 3,
@@ -67,7 +75,7 @@ namespace IC2Test
 
             PersonCollectionData.Add(new Person()
             {
-                ID = 4,
+                ID = 5,
                 Name = "Frank de Raadt",
                 From = "Hoogvliet",
                 Household = 4,
@@ -75,7 +83,7 @@ namespace IC2Test
 
             PersonCollectionData.Add(new Person()
             {
-                ID = 5,
+                ID = 6,
                 Name = "John Doe",
                 From = "Den Haag",
                 Household = 5,
@@ -83,7 +91,7 @@ namespace IC2Test
 
             PersonCollectionData.Add(new Person()
             {
-                ID = 6,
+                ID = 7,
                 Name = "Jane Doe",
                 From = "Den Haag",
                 Household = 5,
@@ -91,16 +99,8 @@ namespace IC2Test
 
             PersonCollectionData.Add(new Person()
             {
-                ID = 7,
-                Name = "Janna Doe",
-                From = "Den Haag",
-                Household = 5,
-            });
-
-            PersonCollectionData.Add(new Person()
-            {
                 ID = 8,
-                Name = "Jan Doe",
+                Name = "Johannes Doe",
                 From = "Den Haag",
                 Household = 5,
             });
@@ -108,17 +108,9 @@ namespace IC2Test
             PersonCollectionData.Add(new Person()
             {
                 ID = 9,
-                Name = "Mariekke Rutten",
+                Name = "Janna Doe",
                 From = "Den Haag",
-                Household = 1,
-            });
-
-            PersonCollectionData.Add(new Person()
-            {
-                ID = 10,
-                Name = "Franseska de Raadt",
-                From = "Den Haag",
-                Household = 4,
+                Household = 5,
             });
 
             TopDataGrid.ItemsSource = PersonCollectionData;
@@ -188,7 +180,7 @@ namespace IC2Test
                     {
                         if (nHHOpTerras == 2)
                         {
-                            MessageBox.Show("count 2 Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
                         }
                         else
@@ -209,9 +201,10 @@ namespace IC2Test
                     {
                         if (nHHOpTerras == 2)
                         {
-                            MessageBox.Show("count 3 Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
-                        } else 
+                        }
+                        else
 
                         //controlleer of nieuw toegoevoegde persoon van het zelfde huishouden vandaan komt.
                         if (bezoeker.Household == TempHouseHoldID)
@@ -223,15 +216,15 @@ namespace IC2Test
                         {
                             // verhoog huishouden count
                             nHHOpTerras++;
-                        }                 
+                        }
                     }
-                   
+
 
                     else if (BezoekerData.Count == 4)
                     {
                         if (nHHOpTerras == 2)
                         {
-                            MessageBox.Show("count 4 Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
                         }
 
@@ -261,6 +254,8 @@ namespace IC2Test
 
                         BezoekerData.Add(bezoeker);
                         TopDataGrid.Items.Refresh();
+
+                        // increase global count for Persons
                         nPersonenOpTerras++;
                     }
                     else if (bezoeker.LastVisited != null)
@@ -273,7 +268,6 @@ namespace IC2Test
                         int result = DateTime.Compare((DateTime)bezoeker.LastVisited, (DateTime)VroegsteWachtendeDatum);
                         if (result <= 0)
                         {
-                            //MessageBox.Show("Persoon is Toegevoegd aan het terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Information);
                             for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
                             {
                                 bezoeker.LastVisited = DateTime.Now;
@@ -281,6 +275,8 @@ namespace IC2Test
 
                             BezoekerData.Add(bezoeker);
                             TopDataGrid.Items.Refresh();
+
+                            // increase global count for Persons
                             nPersonenOpTerras++;
                         }
                         else if (result > 0)
