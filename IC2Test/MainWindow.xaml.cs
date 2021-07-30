@@ -25,7 +25,12 @@ namespace IC2Test
         private ObservableCollection<Person> PersonCollectionData;
         private ObservableCollection<Person> BezoekerData;
         private int nPersonenOpTerras = 0;
+
+        // Huishouden Count
         private int nHHOpTerras = 0;
+
+        // HuisHouden ID
+        private int TempHouseHoldID;
 
         public MainWindow()
 
@@ -49,7 +54,7 @@ namespace IC2Test
                 ID = 2,
                 Name = "Dick van Kooten",
                 From = "Den Haag",
-                Household = 2, 
+                Household = 2,
             });
 
             PersonCollectionData.Add(new Person()
@@ -73,7 +78,7 @@ namespace IC2Test
                 ID = 5,
                 Name = "John Doe",
                 From = "Den Haag",
-                Household = 5, 
+                Household = 5,
             });
 
             PersonCollectionData.Add(new Person()
@@ -86,6 +91,13 @@ namespace IC2Test
 
             TopDataGrid.ItemsSource = PersonCollectionData;
         }
+
+
+        // Alle Controlechecks zijn verwerkt in de NaarTerras Functie
+        // max 4 personen op Terras
+        // hetzelfde object mag niet meerdere keren worden toegevoegd
+        // max 2 huishoudens op het Terras
+        // Controleren op Datum
 
         // voeg Bezoeker toe aan locatie
         // Geef LastVisited een tijdstip
@@ -103,7 +115,7 @@ namespace IC2Test
                     var bezoeker = o as Person;
 
                     // Control Check max 4 personen
-                    if (BezoekerData.Count >= 4)
+                    if (nPersonenOpTerras >= 4)
                     {
                         MessageBox.Show("Terras zit al Vol", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
                         break;
@@ -116,8 +128,64 @@ namespace IC2Test
                         break;
                     }
 
+                    // aantal huishoudens op Terras Tracker
 
-                    
+                    if (BezoekerData.Count == 0)
+                    {
+                        // verhoog huishouden count met 1
+                        nHHOpTerras++;
+
+                        // set temp TempHouseHoldID to bezoeker.household e.g. 5
+                        TempHouseHoldID = bezoeker.Household;
+                    }
+                    else if (BezoekerData.Count == 1)
+                    {
+                        //controlleer of nieuw toegoevoegde persoon van het zelfde huishouden vandaan komt.
+                        if (bezoeker.Household == TempHouseHoldID)
+                        {                 
+                            // nHHOpTerras blijft gelijk dus eigelijk veranderd er niks
+                            // TempHouseHoldID blijft ook gelijk dus hier hoeft eigelijk ook niks mee te gebeuren
+                        }
+                        else if (TempHouseHoldID != bezoeker.Household)
+                        {
+                            // verhoog huishouden count naar 2 
+                            nHHOpTerras++;
+                        }
+                    }
+                    else if (BezoekerData.Count == 2)
+                    {
+                        if (nHHOpTerras == 1)
+                        {
+                            nHHOpTerras++;
+                        }
+
+                        else if (BezoekerData.Count == 2)
+                        {
+                            if (nHHOpTerras == 2)
+                            {
+                                MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                                break;
+                            }
+                        }
+                    }
+
+                    else if (BezoekerData.Count == 3)
+                    {
+                        if (nHHOpTerras == 2)
+                        {
+                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            break;
+                        }
+                    }
+
+                    else if (BezoekerData.Count == 4)
+                    {
+                        if (nHHOpTerras == 2)
+                        {
+                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            break;
+                        }
+                    }
 
                     // Controlecheck of andere personen naar het terras mogen voordat de persoon word geplaats
                     // Eerst Controleren of een Persoon uberhaupt is geweest
@@ -132,6 +200,7 @@ namespace IC2Test
 
                         BezoekerData.Add(bezoeker);
                         TopDataGrid.Items.Refresh();
+                        nPersonenOpTerras++;
                     }
                     else if (bezoeker.LastVisited != null)
                     {
@@ -143,7 +212,7 @@ namespace IC2Test
                         int result = DateTime.Compare((DateTime)bezoeker.LastVisited, (DateTime)VroegsteWachtendeDatum);
                         if (result <= 0)
                         {
-                            MessageBox.Show("Persoon is Toegevoegd aan het terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Information);
+                            //MessageBox.Show("Persoon is Toegevoegd aan het terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Information);
                             for (int i = 0; i < TerrasDataGrid.Items.Count + 1; i++)
                             {
                                 bezoeker.LastVisited = DateTime.Now;
@@ -151,6 +220,7 @@ namespace IC2Test
 
                             BezoekerData.Add(bezoeker);
                             TopDataGrid.Items.Refresh();
+                            nPersonenOpTerras++;
                         }
                         else if (result > 0)
                         {
@@ -166,35 +236,15 @@ namespace IC2Test
             }
         }
 
-        // selecteer bezoeker
-        // verwijder bezoeker vanuit TerrasDatagrid
-        // error Handling
-        private void NaarHuis(object sender, RoutedEventArgs e)
-        {
-            foreach (object o in TerrasDataGrid.SelectedItems)
-            {
-                var bezoeker = o as Person;
-
-                try
-                {
-                    BezoekerData.Remove(bezoeker);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error" + ex.Message.ToString(), "", MessageBoxButton.OK, MessageBoxImage.Error);
-                    throw;
-                }
-            }
-        }
-
-
-
         // Leegt het volledige Terras van alle bezoekers
         private void LeegTerras(object sender, RoutedEventArgs e)
         {
             try
             {
                 BezoekerData.Clear();
+                nPersonenOpTerras = 0;
+                nHHOpTerras = 0;
+
                 MessageBox.Show("Terras is leeggemaakt", "Heading", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
