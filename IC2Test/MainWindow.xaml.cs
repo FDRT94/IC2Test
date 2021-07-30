@@ -89,6 +89,38 @@ namespace IC2Test
                 Household = 5,
             });
 
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 7,
+                Name = "Janna Doe",
+                From = "Den Haag",
+                Household = 5,
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 8,
+                Name = "Jan Doe",
+                From = "Den Haag",
+                Household = 5,
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 9,
+                Name = "Mariekke Rutten",
+                From = "Den Haag",
+                Household = 1,
+            });
+
+            PersonCollectionData.Add(new Person()
+            {
+                ID = 10,
+                Name = "Franseska de Raadt",
+                From = "Den Haag",
+                Household = 4,
+            });
+
             TopDataGrid.ItemsSource = PersonCollectionData;
         }
 
@@ -142,7 +174,7 @@ namespace IC2Test
                     {
                         //controlleer of nieuw toegoevoegde persoon van het zelfde huishouden vandaan komt.
                         if (bezoeker.Household == TempHouseHoldID)
-                        {                 
+                        {
                             // nHHOpTerras blijft gelijk dus eigelijk veranderd er niks
                             // TempHouseHoldID blijft ook gelijk dus hier hoeft eigelijk ook niks mee te gebeuren
                         }
@@ -154,18 +186,22 @@ namespace IC2Test
                     }
                     else if (BezoekerData.Count == 2)
                     {
-                        if (nHHOpTerras == 1)
+                        if (nHHOpTerras == 2)
                         {
-                            nHHOpTerras++;
+                            MessageBox.Show("count 2 Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            break;
                         }
-
-                        else if (BezoekerData.Count == 2)
+                        else
+                        //controlleer of nieuw toegoevoegde persoon van het zelfde huishouden vandaan komt.
+                        if (bezoeker.Household == TempHouseHoldID)
                         {
-                            if (nHHOpTerras == 2)
-                            {
-                                MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
-                                break;
-                            }
+                            // nHHOpTerras blijft gelijk dus eigelijk veranderd er niks
+                            // TempHouseHoldID blijft ook gelijk dus hier hoeft eigelijk ook niks mee te gebeuren
+                        }
+                        else if (TempHouseHoldID != bezoeker.Household)
+                        {
+                            // verhoog huishouden count
+                            nHHOpTerras++;
                         }
                     }
 
@@ -173,17 +209,42 @@ namespace IC2Test
                     {
                         if (nHHOpTerras == 2)
                         {
-                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("count 3 Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
+                        } else 
+
+                        //controlleer of nieuw toegoevoegde persoon van het zelfde huishouden vandaan komt.
+                        if (bezoeker.Household == TempHouseHoldID)
+                        {
+                            // nHHOpTerras blijft gelijk dus eigelijk veranderd er niks
+                            // TempHouseHoldID blijft ook gelijk dus hier hoeft eigelijk ook niks mee te gebeuren
                         }
+                        else if (TempHouseHoldID != bezoeker.Household)
+                        {
+                            // verhoog huishouden count
+                            nHHOpTerras++;
+                        }                 
                     }
+                   
 
                     else if (BezoekerData.Count == 4)
                     {
                         if (nHHOpTerras == 2)
                         {
-                            MessageBox.Show("Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show("count 4 Teveel Huishoudens op het Terras", "Heading", MessageBoxButton.OK, MessageBoxImage.Error);
                             break;
+                        }
+
+                        //controlleer of nieuw toegoevoegde persoon van het zelfde huishouden vandaan komt.
+                        if (bezoeker.Household == TempHouseHoldID)
+                        {
+                            // nHHOpTerras blijft gelijk dus eigelijk veranderd er niks
+                            // TempHouseHoldID blijft ook gelijk dus hier hoeft eigelijk ook niks mee te gebeuren
+                        }
+                        else if (TempHouseHoldID != bezoeker.Household)
+                        {
+                            // verhoog huishouden count
+                            nHHOpTerras++;
                         }
                     }
 
